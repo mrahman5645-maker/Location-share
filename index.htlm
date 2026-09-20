@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location Share</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    button {
+      padding: 14px 25px;
+      font-size: 17px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 25px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📍 Share Location</h1>
+
+  <p>
+    To continue, allow location access when your browser asks.
+  </p>
+
+  <button onclick="getLocation()">
+    Allow & Share Location
+  </button>
+
+  <div id="result"></div>
+
+  <script>
+    function getLocation() {
+
+      const result = document.getElementById("result");
+
+      if (!navigator.geolocation) {
+        result.innerHTML = "Location is not supported by this browser.";
+        return;
+      }
+
+      result.innerHTML = "Requesting your location...";
+
+      navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          result.innerHTML =
+            "✅ Location received!<br><br>" +
+            "Latitude: " + latitude + "<br>" +
+            "Longitude: " + longitude + "<br><br>" +
+            "<a target='_blank' href='https://www.google.com/maps?q=" +
+            latitude + "," + longitude +
+            "'>Open in Google Maps</a>";
+        },
+
+        function(error) {
+
+          if (error.code === 1) {
+            result.innerHTML =
+              "❌ Location permission was denied.";
+          } else {
+            result.innerHTML =
+              "❌ Unable to get your location.";
+          }
+        },
+
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+      );
+    }
+  </script>
+
+</body>
+</html>
